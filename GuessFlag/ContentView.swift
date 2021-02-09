@@ -14,6 +14,9 @@ struct ContentView: View {
     
     @State private var showingScore = false
     @State private var scoreTitle = ""
+    
+    //If status is false, then don't improve score, if true, then score will be scores + 1, in showScore() func
+    @State private var scoreStatus = false
     @State private var scores = 0
     
     var body: some View {
@@ -53,7 +56,7 @@ struct ContentView: View {
                         .foregroundColor(.white)
                         .fontWeight(.bold)
                         .font(.title)
-                }
+                }.padding(.bottom)
             }
         }.alert(isPresented: $showingScore) {
             Alert(title: Text(scoreTitle), message: Text("Your score is \(scores)"), dismissButton: .default(Text("Continue")){
@@ -65,8 +68,10 @@ struct ContentView: View {
     func flagTapped(_ number: Int) {
         if number == correctAnswer {
             scoreTitle = "Correct!"
+            scoreStatus = true
         } else {
-            scoreTitle = "Wrong"
+            scoreTitle = "Wrong..."
+            scoreStatus = false
         }
         
         showingScore = true
@@ -78,7 +83,7 @@ struct ContentView: View {
     }
     
     func showScore() {
-        if scoreTitle == "Correct" {
+        if scoreStatus == true {
             scores += 1
         }
     }
